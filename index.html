@@ -40,7 +40,8 @@
     <div style="display: flex; gap: 20px;">
         <div style="flex: 1; min-width: 0;">
          <h3>Committed to Clinical Efficiency</h3>
-         <p>As far as EMRs go I was dealt a bad hand- I got stuck with E-Clinical Works (ECW). You may not have heard of ECW before and there's a reason for that- it's terrible. It's many inefficiencies make it difficult to get through a patient encounter- let alone an entire day of work. So I learned to use Auto Hot Keys (AHK) to overcome most of the inefficiencies imposed on me by ECW. One of the main issues with ECW is the rigidity in their macro system. It is limited to a single trigger for all macros (CRTL + Space) which requires some finger gymnastics when the trigger should be acessible as to not interrupt the flow of typing or the palcement of the fingers on the keys, especially when multiple macros are being triggered in a row. The biggest drawback is the exclusivity of triggers once selected. If someone maps their macro to the trigger "PVD" no one else can use that, which requires everyone to create highly individualized macro triggers which causes two problems. One, memory- if the macro doesn't have the most obvious trigger then it will be difficult to remember. Two, brevity. Practitioners are having to resort to using their initials or some other identifier before their macros (such as "MWPVD") which adds excessive keystrokes to a function that is intended to reduce keystrokes. A third issue (yes, I know that's more than two) is the lack of utility offered by these packaged macros. For example, if I wanted to have a macro that involved rich text (bold, underlines, italics), I can't. If I wanted the macro to include enters, tabs, or involve any complex series of keystrokes, or even mouse clicks- it cannot. AHK solves all of this and more. I've spent a great deal of time cultivating my own AHK script that I am making available for use, and it can be viewed and downloaded <a href="https://github.com/matlock-y/Mr.Macrows">here</a>.</p>
+         <p>For many dealing with sub-optimal EMRs the answer may not be more advanced tech (AI scribing tools), but rather less advanced tech- simple macros. Macros' potential to improve clinical efficiency has not been fully tapped, especially by EMRs. I am striving to develop a maximally useful script using an open source programming software called AutoHotKey, which I will make fully available to any and all who wish to utilize it. While under development still, it can be viewed and downloaded <a href="https://github.com/matlock-y/Mr.Macrows">here</a>.</p>
+         <p>Read more about this project in my <a href="can-ahk-solve-ecw.html">blog section.</a></p>
 
         </div>
   
@@ -48,24 +49,13 @@
         <h3 style=""text-align:center;">See it in action</h3>
         <video controls style="width: 100%; max-width: 100%; height: auto;">
             <source src="mrmacrows_demo.mp4" type="video/mp4">
-            This video is not working because your browser is not good. 
+            This video is not working. Surely this is your fault, not ours. 
         </video>
         </div>
     </div>
 
 </section>
-<section>
-    <h4>While still under development, here are some features it offers:</h3>
-    <ul>
-        <li>Full customizability and exclusivity of macros: Since the file is on my local desktop that I use for clinic, even if a doctor in the room next to me uses the same macro trigger- they won't collide.</li>
-        <li>Easy triggers: Most of my macros trigger with a semicolon, which my pinky finger is already touching most of the time. This allows for seamless and fast triggering.</li>
-        <li>Logical Abbreviations: Long statements can be triggered with sensical abbreviations making a large catalog of macros easy to remember. For example: "rtc with doctors appointment when CL arrive to continue fit" is triggered by "rda;"- return-doctor-appointment.</li>
-        <li>A Contact Lens Rx Conversion Tool-Accessible in any EMR: Just highlight the text of your final spectacle Rx and hit the macro trigger (Alt + C) and it will immediately vertex to a contact lens prescription. If you are working in plus cyl form like I am, it will also automatically convert to minus cyl form. In addition to that, it suggests brands that would work well for that Rx and gives the relevant Rx available in that lenses parameters.</li>
-        <li>A Contact Lens Reference Tool: AHK is not just for injecting text, but is also good for quick reference of information. By hitting the macro trigger (Alt + P) it will pull up a contact lens reference giving the parameters, and fit guide, for any contact lens. There is also a list of discontinued CL brands so you don't have to do anymore frantic internet searches.</li>
-        <li>Macro Menus: Sometimes there are so many variations in a clinical situation that it hardly makes sense to make macros for each individual one, despite how frequently they would be used. Diabetes is one such. Did they have retinopathy? Was it mild, moderate, or severe? Was it in just one eye, or both? Was there cme? Which eye was the cme in? All these variations make it impractical to cover all the bases with individual macros. Here's where menu macros come in. In this example with diabetic findings, simply trigger one macro for them all-"dm;", then it will ask, was there retinopathy? Which eye was it in? Was there cme? Which eye was it in? Then at the end it spits out a perfectly formatted and gramatical string of text that you don't have to think twice about. All options are selected using keys on the keyboard (a,s,d,f, etc) that the fingers are already on, so there's no need for time wasting switching from keyboard to mouse and back again. There are many such menu macros for finalizing CL fits, cataracts, PVDs, and more!</li>
-        <li>AI-Naive: While AI and ambient scribes are all the hype, these macros give you granular control over your text with 100% confidence in the content. The problem with typing is it is too time consuming, and the problem with AI is that you can't trust, and have to double check its input. They are opposite problems, and Mr. Macrows gives the perfect common ground. For the cost of just a few seconds and a few keystrokes, you get to chart exactly what you mean to in exactly the style you expect, without having to go through the pain of training an AI to think like you, and not make mistakes.</li>
-    </ul>
-</section>
+
             
 
 <footer>
