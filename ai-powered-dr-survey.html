@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendee Survey</title>
+  <!-- Load official Supabase library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body style="font-family: system-ui, sans-serif; max-width: 560px; margin: 0 auto; padding: 1.5rem;">
+
+  <h1 style="font-size: 1.4rem; color: #0f172a; margin-bottom: 1.5rem;">AI-Powered Dr Survey</h1>
+
+  <form id="pollForm">
+    <!-- The JavaScript loop injects all fieldsets here -->
+    <div id="questionsContainer"></div>
+
+    <button type="submit" id="submitBtn" style="width: 100%; padding: 0.85rem; font-size: 1.05rem; font-weight: 600; background: #2563eb; color: #fff; border: none; border-radius: 8px; cursor: pointer;">
+      Submit Responses
+    </button>
+  </form>
+
+  <script>
+    // ==========================================
+// 1. SUPABASE CLIENT INITIALIZATION
+// ==========================================
+// Replace these with the actual keys from your Supabase Project Settings > API
+const SUPABASE_URL = 'https://fputcfqbbtwreiixzvxm.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_GAbeAPj4UN3bUdEVX7xXvw_L-d6RDbS';
+
+// Initialize the Supabase client library loaded via CDN
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+// ==========================================
+// 2. SURVEY QUESTIONS DEFINITION
+// ==========================================
+// To add, remove, or edit questions, simply update this array.
+const surveyQuestions = [
+{
+    id: "sex",
+    prompt: "What is your sex?",
+    options: ["Male", "Female"]
+},
+{
+    id: "age",
+    prompt: "What is your age?",
+    options: ["lt; 35", "35-49", "50-64", "65+"]
+},
+{
+    id: "ai_use",
+    prompt: "How much do you use AI in your everyday life?",
+    options: ["What is AI?", "It exists, and I don't touch it", "I use chatbots such as ChatGPT or others", "I use AI beyond chatbots", "I am an AI power user"]
+},
+{
+    id: "emr_type",
+    prompt: "What EMR do you use?",
+    options: ["Eyefinity/Encompass", "Revolution EHR", "Compulink", "Crystal", "Nextech", "EPIC", "Barti", "MaximEyes", "iTrust", "Other"]
+},
+{
+    id: "ai_scribe_use",
+    prompt: "Do you use an AI scribing tool?",
+    options: ["yes", "no"]
+},
+{
+    id: "ai_scribe_like",
+    prompt: "If yes, how do you like it?",
+    options: ["Very much!", "It's ok", "It works just as well as manual entry", "It isn't that good", "It's terrible!"]
+},
+{
+    id: "ai_sribe_errors",
+    prompt: "Do you have to correct errors with your AI scribe?",
+    options: ["Never", "Rarely", "Sometimes", "Often", "I don't check"]
+},
+{
+    id: "chatbot_questions",
+    prompt: "I ask chatbots questions related to clinical care",
+    options: ["Frequently", "Occasionally", "Rarely", "NEVER"]
+},
+{
+    id: "chatbot_appropriate",
+    prompt: "Is it appropriate to ask a chatbot questions related to a patients care?",
+    options: ["Definitely yes", "Maybe yes", "Neutral/ It depends", "Maybe no", "Definitely no"]
+}
+];
+
+// ==========================================
+// 3. DYNAMIC HTML GENERATION
+// ==========================================
+// Find the placeholder container inside your <form id="pollForm">
+const container = document.getElementById('questionsContainer');
+
+// Map questions into semantic <fieldset> blocks with radio inputs
+container.innerHTML = surveyQuestions.map(q => `
+  <fieldset style="margin-bottom: 1.5rem; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1.25rem;">
+    <legend style="font-weight: 600; font-size: 1.05rem; padding: 0 0.5rem; color: #1e293b;">${q.prompt}</legend>
+    <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
+      ${q.options.map(opt => `
+        <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-size: 1rem; color: #334155;">
+          <input type="radio" name="${q.id}" value="${opt}" required style="accent-color: #2563eb; width: 1.15rem; height: 1.15rem;">
+          <span>${opt}</span>
+        </label>
+      `).join('')}
+    </div>
+  </fieldset>
+`).join('');
+
+// ==========================================
+// 4. BATCH SUBMISSION TO SUPABASE
+// ==========================================
+const form = document.getElementById('pollForm');
+const submitBtn = document.getElementById('submitBtn');
+
+form.addEventListener('submit', async (e) => {
+  // Prevent default page reload
+  e.preventDefault();
+
+  // Disable button to prevent double-submissions
+  submitBtn.disabled = true;
+  submitBtn.innerText = 'Submitting...';
+
+  // Generate a unique attendee identifier for this submission
+  const participantId = crypto.randomUUID();
+
+  // Extract all answered inputs from the form
+  const formData = new FormData(form);
+  const rowsToInsert = [];
+
+  for (const [questionId, selectedValue] of formData.entries()) {
+    rowsToInsert.push({
+      participant_id: participantId,
+      question_id: questionId,
+      selected_option: selectedValue
+    });
+  }
+
+  // Send all answer rows directly to the Supabase 'answers' table in a single batch
+  const { error } = await client
+    .from('answers')
+    .insert(rowsToInsert);
+
+  if (error) {
+    console.error('Supabase submission error:', error);
+    alert('Submission failed: ' + error.message);
+    submitBtn.disabled = false;
+    submitBtn.innerText = 'Submit Responses';
+  } else {
+    // Replace the form with a confirmation message on success
+    document.body.innerHTML = `
+      <div style="text-align: center; padding: 3rem 1.5rem; font-family: system-ui, sans-serif;">
+        <h2 style="color: #0f172a; margin-bottom: 0.5rem;">Thank you!</h2>
+        <p style="color: #64748b; font-size: 1.1rem;">Your responses have been recorded. Watch the slides for the live breakdown.</p>
+      </div>
+    `;
+  }
+});
+  </script>
+
+</body>
+</html>
+
+
+
